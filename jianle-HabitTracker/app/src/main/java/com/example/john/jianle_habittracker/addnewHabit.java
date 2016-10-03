@@ -82,7 +82,7 @@ public class addnewHabit extends AppCompatActivity {
         tweetList.add(newHabit);
         adapter.notifyDataSetChanged();
 
-        saveInFile();
+        //saveInFile();
         Intent intent = new Intent(this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
