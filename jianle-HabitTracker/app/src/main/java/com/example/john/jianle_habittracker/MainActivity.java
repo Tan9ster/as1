@@ -21,9 +21,7 @@ import java.util.ArrayList;
 
 /*
 open gson file if exist
-
 display from gson file
-
 button switches activity
  */
 public class MainActivity extends AppCompatActivity {
@@ -52,7 +50,11 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
 
     }
+    public void buttonExit(View view) {
+        finish();
+        System.exit(0);
 
+    }
     protected void onStart(){
         super.onStart();
         //loadFromFile();
@@ -65,17 +67,13 @@ public class MainActivity extends AppCompatActivity {
         try {
             FileInputStream fis = openFileInput(FILENAME);
             BufferedReader in = new BufferedReader(new InputStreamReader(fis));
-
             Gson gson = new Gson();
-
             // Code from http://stackoverflow.com/questions/12384064/gson-convert-from-json-to-a-typed-arraylistt
             Type listType = new TypeToken<ArrayList<habitItem>>(){}.getType();
-
             habitList = gson.fromJson(in,listType);
             Toast.makeText(this, "Employee Name    : "+habitList.get(0).getName(),Toast.LENGTH_SHORT).show();
             System.out.println("Employee Name    : "+habitList.get(0));
             System.out.println("Employee Name    : "+habitList.get(1));
-
         } catch (FileNotFoundException e) {
 			/* Create a brand new tweet list if we can't find the file.
             habitList = new ArrayList<habitItem>();
@@ -83,4 +81,3 @@ public class MainActivity extends AppCompatActivity {
     }
             */
 }
-

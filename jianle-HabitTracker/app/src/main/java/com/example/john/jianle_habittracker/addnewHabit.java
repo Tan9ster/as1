@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 
@@ -18,6 +19,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+
+import static android.widget.Toast.LENGTH_SHORT;
 
 /**
  * Created by john on 2016-09-24.
@@ -36,13 +39,9 @@ public class addnewHabit extends AppCompatActivity {
 
     private static final String FILENAME = "datafile.json";
     private EditText nameText;
-    private EditText dateText;
-    private ListView oldTweetsList;
-    private ArrayList<habitItem> tweetList = new ArrayList<>();
+    private EditText whichdayText;
+    private ArrayList<habitItem> habitList = new ArrayList<>();
     private ArrayAdapter<habitItem> adapter;
-    SharedPreferences somedata;//
-    EditText sharedData;//
-    TextView dataResult;//
 
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -50,45 +49,39 @@ public class addnewHabit extends AppCompatActivity {
         setContentView(R.layout.testing);
         //somedata=getSharedPreferences(FILENAME,0);//
         nameText=(EditText)findViewById(R.id.addnewHabit);
-        dateText=(EditText)findViewById(R.id.dateAdded);
+        whichdayText=(EditText)findViewById(R.id.dateAdded);
     }
 
     protected void onStart(){
 
         super.onStart();
         //loadFromFile();
-        adapter = new ArrayAdapter<habitItem>(this, R.layout.habit_item, tweetList);
+        adapter = new ArrayAdapter<habitItem>(this, R.layout.habit_item, habitList);
 //      oldTweetsList.setAdapter(adapter);
     }
-    /*
-    public void backtoMainactivityadd(View view){ //adding habit and storing data
-        String text1=nameText.getText().toString();
-        nameText.setText("");
-        saveInFile();
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
-        done();
-    }
-    */
 
+    //click on add to add new habit, close current activty, go back to main activty
     public void backtoMainactivityadd(View view){ //adding habit and storing data
         //String data2=sharedData.getText().toString();
         //SharedPreferences.Editor editor=somedata.edit();
         //editor.putString("string1", data2);
         //editor.commit();
         String text = nameText.getText().toString();
-        habitItem newHabit = new habitItem(text);
-        tweetList.add(newHabit);
+
+        String text2 = whichdayText.getText().toString();
+        habitItem newHabit = new habitItem(text, text2);
+
+        habitList.add(newHabit);
         adapter.notifyDataSetChanged();
 
-        //saveInFile();
+        saveInFile();
+        Toast.makeText(this, "Habit added!", LENGTH_SHORT).show();
         Intent intent = new Intent(this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         done();
     }
-
+    //exit current activity and return to main activity
     public void backtoMainactivity(View view){ //if adding habit is cancelled
         Intent intent = new Intent(this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -107,7 +100,7 @@ public class addnewHabit extends AppCompatActivity {
             BufferedWriter out = new BufferedWriter(new OutputStreamWriter(fos));
 
             Gson gson = new Gson();
-            gson.toJson(tweetList, out);
+            gson.toJson(habitList, out);
             //gson.toJson(string,out);
             out.flush();
 
@@ -123,21 +116,3 @@ public class addnewHabit extends AppCompatActivity {
 }
 
 
-
-/*
-    private void saveInFile() {
-        try {
-            OutputStreamWriter out = new OutputStreamWriter(openFileOutput(FILENAME, 0));
-
-            out.write(nameText.getText().toString());
-
-            out.close();
-            Toast.makeText(this, "The contents are saved in the file.", Toast.LENGTH_LONG).show();
-        }
-
-        catch (Throwable t) {
-            Toast.makeText(this, "Exception: "+t.toString(), Toast.LENGTH_LONG).show();
-        }
-    }
-
-*/
